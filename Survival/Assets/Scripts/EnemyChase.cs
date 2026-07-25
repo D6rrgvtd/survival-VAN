@@ -25,4 +25,6 @@ public class EnemyChase : MonoBehaviour
             rb.linearVelocity = direction * speed;
         }
     }
+
+    
 }
