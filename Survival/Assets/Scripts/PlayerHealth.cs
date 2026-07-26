@@ -2,30 +2,46 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
-    public int maxHp = 3; // 最大HP（3回耐えられる）
+    public int maxHp = 3;
     private int currentHp;
+
+  
+    public GameObject gameOverText;
 
     void Start()
     {
-        currentHp = maxHp; // ゲーム開始時にHPをいっぱいに
+        currentHp = maxHp;
     }
 
-    // 敵の体にぶつかった瞬間に呼び出される関数
     void OnCollisionEnter2D(Collision2D collision)
     {
-        // ぶつかった相手のタグが「Enemy」なら
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            currentHp--; // HPを1減らす
+            currentHp--;
             Debug.Log("ダメージ！ 残りHP: " + currentHp);
 
-            // 敵も同時に消す（プレイヤーに突撃して自爆するイメージ）
             Destroy(collision.gameObject);
-
 
             if (currentHp <= 0)
             {
-                Destroy(gameObject);
+                Debug.Log("ゲームオーバー！");
+
+                
+                if (gameOverText != null)
+                {
+                    gameOverText.SetActive(true);
+                }
+
+                GameTimer timer = FindFirstObjectByType<GameTimer>();
+
+              
+                if (timer != null)
+                {
+                    timer.StopTimer();
+                }
+
+
+                gameObject.SetActive(false);
             }
         }
     }

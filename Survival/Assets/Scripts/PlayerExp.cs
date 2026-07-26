@@ -2,14 +2,13 @@ using UnityEngine;
 
 public class PlayerExp : MonoBehaviour
 {
-    public int currentExp = 0; // 現在の経験値
-    public int nextLevelExp = 5; // レベルアップに必要な経験値
-    public int currentLevel = 1; // 現在のレベル
-    private AutoAttack autoAttack; // ★攻撃の台本を覚える用
+    public int currentExp = 0;
+    public int nextLevelExp = 5;
+    public int currentLevel = 1;
+    private AutoAttack autoAttack;
 
     void Start()
     {
-        // ★自分（Player）にくっついているAutoAttackスクリプトを取得する
         autoAttack = GetComponent<AutoAttack>();
     }
 
@@ -34,10 +33,18 @@ public class PlayerExp : MonoBehaviour
         nextLevelExp += 5;
         Debug.Log("レベルアップ！現在のレベル: " + currentLevel);
 
-        // ★【追加】レベルが上がるごとに、攻撃間隔を0.15秒ずつ短くして強くする！
         if (autoAttack != null)
         {
-            autoAttack.IncreaseAttackSpeed(0.15f);
+            // ★【条件変更】もし上がったレベルが「5の倍数（5, 10, 15...）」なら新しい武器を追加
+            if (currentLevel % 5 == 0)
+            {
+                autoAttack.AddNewWeapon();
+            }
+            else
+            {
+                // ★5の倍数以外のレベルでは、通常通り連射速度をアップさせる
+                autoAttack.IncreaseAttackSpeed(0.15f);
+            }
         }
     }
 }
